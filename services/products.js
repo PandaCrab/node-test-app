@@ -15,8 +15,16 @@ const getMultiple = async (page = 1) => {
 
 const create = async (product) => {
     const result = await db.query(
-        `INSERT INTO products.store (name, price, imgUrl, color, quantity)
-        VALUES ('${product.name}', '${product.price}', '${product.imgUrl}', '${product.color}', '${product.quantity}')`
+        `INSERT INTO products.store (name, price, imgUrl, color, quantity, width, height)
+        VALUES (
+            '${product.name}',
+            '${product.price}',
+            '${product.imgUrl}',
+            '${product.color}',
+            '${product.quantity}',
+            '${product.width}',
+            '${product.height}'
+        )`
     );
 
     let message = 'Error when try add product';
