@@ -1,11 +1,9 @@
-const mysql = require('mysql2/promise');
-const config = require('../config');
+const mongoose = require('mongoose');
 
-const query = async (sql, params) => {
-  const connection = await mysql.createConnection(config.db);
-  const [results] = await connection.execute(sql, params);
-  
-  return results;
+const url = 'mongodb+srv://YevhenFarbitnyi:SneJe19941996@testcluster.rbjaq.mongodb.net/Test';
+
+const main = async () => {
+  await mongoose.connect(url);
 };
 
-module.exports = { query };
+module.exports = { main };

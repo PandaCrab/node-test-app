@@ -1,6 +1,8 @@
 const express = require('express');
 const cors = require('cors');
-const productStorageRouter = require('./routes/productsStorage');
+const { main } = require('./services/db');
+
+const { Product } = require('./services/models');
 
 const PORT = process.env.PORT || 4000;
 
@@ -8,15 +10,25 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
-app.use(
-  express.urlencoded({ extended: true })
-);
 
-app.get('/', (req, res) => {
-  res.json({ message: 'ok' })
+app.get('/storage', async (req, res) => {
+  try {
+      const allProducts = await Product.find().lean();
+      return res.status(200).json(allProducts);
+  } catch (error) {
+      console.log(error.message);
+  }
 });
 
-app.use('/storage', productStorageRouter);
+app.post('/storage', async (req, res) => {
+  try {
+    const newProduct = new Product({ ...req.body });
+    const insertedProduct = await newProduct.save();
+    return res.status(201).json(insertedProduct);
+  } catch (err) {
+    console.log(err)
+  }
+});
 
 app.use((err, req, res, next) => {
   const statusCode = err.statusCode || 500;
@@ -25,6 +37,18 @@ app.use((err, req, res, next) => {
   return;
 });
 
-app.listen(PORT, () => {
-  console.log(`Server listening on ${PORT}`);
-});
+const start = async () => {
+  try {
+    await main();
+    
+    app.listen(PORT, () => {
+      console.log(`Server listening on ${PORT}`);
+    });
+  } catch(err) {
+    console.log(err);
+
+    process.exit(1);
+  }
+};
+
+start();
