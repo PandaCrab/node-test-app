@@ -15,4 +15,11 @@ const productSchema = new mongoose.Schema({
 
 const Product = mongoose.model('product', productSchema);
 
-module.exports = { Product };
+const authSchema = new mongoose.Schema({
+    username: { type: String, required: true },
+    password: { type: String, required: true }
+}, { collection: 'users' });
+
+const User = mongoose.model('auth', authSchema);
+
+module.exports = { Product, User };

@@ -2,7 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const { main } = require('./services/db');
 
-const { Product } = require('./services/models');
+const { Product, User } = require('./services/models');
 
 const PORT = process.env.PORT || 4000;
 
@@ -14,6 +14,7 @@ app.use(express.json());
 app.get('/storage', async (req, res) => {
   try {
       const allProducts = await Product.find().lean();
+      console.log(allProducts)
       return res.status(200).json(allProducts);
   } catch (error) {
       console.log(error.message);
@@ -27,6 +28,27 @@ app.post('/storage', async (req, res) => {
     return res.status(201).json(insertedProduct);
   } catch (err) {
     console.log(err)
+  }
+});
+
+app.use('/auth', async (req, res) => {
+  console.log(req.body)
+  try {
+    const findUser = await User.findOne(req.body);
+    if (findUser && req.body.password === findUser.password) {
+      console.log('ok')
+      res.send({
+        token: findUser._id,
+        message: 'Ok'
+      });
+    } else {
+      res.send({
+        token: '',
+        message: 'Incorrect name or password'
+      });
+    }
+  } catch (err) {
+    console.log(err);
   }
 });
 
