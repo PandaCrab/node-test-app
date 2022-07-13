@@ -35,12 +35,18 @@ app.use('/auth', async (req, res) => {
   console.log(req.body)
   try {
     const findUser = await User.findOne(req.body);
+    
     if (findUser && req.body.password === findUser.password) {
-      console.log('ok')
       res.send({
         token: findUser._id,
+        user: {
+          username: findUser.username,
+          admin: findUser.admin,
+          age: findUser.age
+        },
         message: 'Ok'
       });
+      console.log(findUser);
     } else {
       res.send({
         token: '',
