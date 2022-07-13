@@ -22,4 +22,15 @@ const authSchema = new mongoose.Schema({
 
 const User = mongoose.model('auth', authSchema);
 
-module.exports = { Product, User };
+const registrationSchema = new mongoose.Schema({
+    email: { type: String, required: true, unique: true },
+    username: { type: String, required: true },
+    password: { type: String, required: true },
+    phone: { type: Number, required: true, unique: true },
+    age: Number,
+    address: String
+}, { collection: 'users' });
+
+const Registration = mongoose.model('registration', registrationSchema);
+
+module.exports = { Product, User, Registration };

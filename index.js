@@ -2,7 +2,8 @@ const express = require('express');
 const cors = require('cors');
 const { main } = require('./services/db');
 
-const { Product, User } = require('./services/models');
+const { Product, User, Registration } = require('./services/models');
+const e = require('express');
 
 const PORT = process.env.PORT || 4000;
 
@@ -14,7 +15,6 @@ app.use(express.json());
 app.get('/storage', async (req, res) => {
   try {
       const allProducts = await Product.find().lean();
-      console.log(allProducts)
       return res.status(200).json(allProducts);
   } catch (error) {
       console.log(error.message);
@@ -25,6 +25,7 @@ app.post('/storage', async (req, res) => {
   try {
     const newProduct = new Product({ ...req.body });
     const insertedProduct = await newProduct.save();
+
     return res.status(201).json(insertedProduct);
   } catch (err) {
     console.log(err)
@@ -53,6 +54,38 @@ app.use('/auth', async (req, res) => {
         message: 'Incorrect name or password'
       });
     }
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+app.use('/registration', async (req, res) => {
+  try {
+    const isBusy = await User.findOne(req.body);
+    const body = req.body;
+
+    if (!isBusy) {
+      const newUser = new Registration({ ...req.body });
+      const insertUser = await newUser.save();
+
+      console.log(insertUser)
+      return res.send({
+        token: insertUser._id,
+        user: {
+          email: insertUser.email,
+          username: insertUser.username,
+          age: insertUser.age,
+          address: insertUser.address
+        },
+        message: 'ok'
+      })
+    } 
+    
+    if (isBusy.email && body.email === isBusy.email) {
+      return res.send('Email alredy exists');
+    }
+
+    return res.send('Somthing wrong');
   } catch (err) {
     console.log(err);
   }
