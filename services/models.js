@@ -17,7 +17,11 @@ const Product = mongoose.model('product', productSchema);
 
 const authSchema = new mongoose.Schema({
     username: { type: String, required: true },
-    password: { type: String, required: true }
+    password: { type: String, required: true },
+    email: String,
+    age: String,
+    phone: Number,
+    admin: Boolean
 }, { collection: 'users' });
 
 const User = mongoose.model('auth', authSchema);
@@ -27,10 +31,19 @@ const registrationSchema = new mongoose.Schema({
     username: { type: String, required: true },
     password: { type: String, required: true },
     phone: { type: Number, required: true, unique: true },
-    age: Number,
-    address: String
+    age: Number
 }, { collection: 'users' });
 
 const Registration = mongoose.model('registration', registrationSchema);
 
-module.exports = { Product, User, Registration };
+const UserSchema = mongoose.Schema({
+    email: String,
+    username: String,
+    phone: Number,
+    admin: Boolean,
+    age: Number
+});
+
+const UserInfo = mongoose.model('users', UserSchema);
+
+module.exports = { Product, User, Registration, UserInfo };

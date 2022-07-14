@@ -2,7 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const { main } = require('./services/db');
 
-const { Product, User, Registration } = require('./services/models');
+const { Product, User, Registration, UserInfo } = require('./services/models');
 const e = require('express');
 
 const PORT = process.env.PORT || 4000;
@@ -18,6 +18,23 @@ app.get('/storage', async (req, res) => {
       return res.status(200).json(allProducts);
   } catch (error) {
       console.log(error.message);
+  }
+});
+
+app.use('/users', async (req, res) => {
+  console.log(req.body)
+  try {
+    const findUser = await UserInfo.findOne({_id: req.body});
+
+    return res.send({
+      username: findUser.username,
+      email: findUser.email,
+      phone: findUser.phone,
+      admin: findUser.admin,
+      age: findUser.age
+    });
+  } catch (err) {
+    console.log(err);
   }
 });
 
@@ -41,7 +58,9 @@ app.use('/auth', async (req, res) => {
       res.send({
         token: findUser._id,
         user: {
+          emai: findUser.email,
           username: findUser.username,
+          phone: findUser.phone,
           admin: findUser.admin,
           age: findUser.age
         },
