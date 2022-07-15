@@ -16,6 +16,7 @@ const productSchema = new mongoose.Schema({
 const Product = mongoose.model('product', productSchema);
 
 const authSchema = new mongoose.Schema({
+    _id: String,
     username: { type: String, required: true },
     password: { type: String, required: true },
     email: String,
@@ -46,4 +47,25 @@ const UserSchema = mongoose.Schema({
 
 const UserInfo = mongoose.model('users', UserSchema);
 
-module.exports = { Product, User, Registration, UserInfo };
+const OrderSchema = mongoose.Schema({
+    userId: { type: String, required: true, },
+    orderId: { type: Number, require: true, unique: true },
+    shippingInfo: {
+        username: { type: String, requireed: true },
+        phone: { type: String, rquireed: true },
+        address: { 
+            street: { type: String, required: true },
+            city: { type: String, required: true },
+            country: { type: String, required: true },
+            zip: { type: String, required: true }
+         },
+        optional: String
+    },
+    orderInfo: {
+        products: [Object]
+    }
+});
+
+const Order = mongoose.model('orders', OrderSchema);
+
+module.exports = { Product, User, Registration, UserInfo, Order };

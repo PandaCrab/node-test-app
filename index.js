@@ -2,8 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const { main } = require('./services/db');
 
-const { Product, User, Registration, UserInfo } = require('./services/models');
-const e = require('express');
+const { Product, User, Registration, UserInfo, Order } = require('./services/models');
 
 const PORT = process.env.PORT || 4000;
 
@@ -22,17 +21,16 @@ app.get('/storage', async (req, res) => {
 });
 
 app.use('/users', async (req, res) => {
-  console.log(req.body)
   try {
-    const findUser = await UserInfo.findOne({_id: req.body});
-
-    return res.send({
-      username: findUser.username,
-      email: findUser.email,
-      phone: findUser.phone,
-      admin: findUser.admin,
-      age: findUser.age
-    });
+    const findUser = await UserInfo.findOne(req.body);
+      return res.send({
+        id: findUser._id,
+        username: findUser.username,
+        email: findUser.email,
+        phone: findUser.phone,
+        admin: findUser?.admin,
+        age: findUser?.age
+      });
   } catch (err) {
     console.log(err);
   }
@@ -50,7 +48,6 @@ app.post('/storage', async (req, res) => {
 });
 
 app.use('/auth', async (req, res) => {
-  console.log(req.body)
   try {
     const findUser = await User.findOne(req.body);
     
@@ -58,6 +55,7 @@ app.use('/auth', async (req, res) => {
       res.send({
         token: findUser._id,
         user: {
+          id: findUser._id,
           emai: findUser.email,
           username: findUser.username,
           phone: findUser.phone,
@@ -66,13 +64,23 @@ app.use('/auth', async (req, res) => {
         },
         message: 'Ok'
       });
-      console.log(findUser);
     } else {
       res.send({
         token: '',
         message: 'Incorrect name or password'
       });
     }
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+app.post('/order', async (req, res) => {
+  try {
+    const newOrder = new Order({ ...req.body });
+    const insertedOrder = await newOrder.save();
+
+    return res.status(201).json({orderId: insertedOrder.orderId})
   } catch (err) {
     console.log(err);
   }
@@ -87,10 +95,10 @@ app.use('/registration', async (req, res) => {
       const newUser = new Registration({ ...req.body });
       const insertUser = await newUser.save();
 
-      console.log(insertUser)
       return res.send({
         token: insertUser._id,
         user: {
+          id: insertUser._id,
           email: insertUser.email,
           username: insertUser.username,
           age: insertUser.age,
