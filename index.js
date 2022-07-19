@@ -75,12 +75,23 @@ app.use('/auth', async (req, res) => {
   }
 });
 
-app.post('/order', async (req, res) => {
+app.post('/orders', async (req, res) => {
   try {
     const newOrder = new Order({ ...req.body });
     const insertedOrder = await newOrder.save();
 
     return res.status(201).json({orderId: insertedOrder.orderId})
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+app.use('/userOrders', async (req, res) => {
+  try {
+    const userOrders = await Order.find(req.body);
+    console.log(req.body)
+
+    return res.send(userOrders);
   } catch (err) {
     console.log(err);
   }

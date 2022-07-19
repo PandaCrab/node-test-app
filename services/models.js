@@ -28,6 +28,7 @@ const authSchema = new mongoose.Schema({
 const User = mongoose.model('auth', authSchema);
 
 const registrationSchema = new mongoose.Schema({
+    date: Date,
     email: { type: String, required: true, unique: true },
     username: { type: String, required: true },
     password: { type: String, required: true },
@@ -48,10 +49,11 @@ const UserSchema = mongoose.Schema({
 const UserInfo = mongoose.model('users', UserSchema);
 
 const OrderSchema = mongoose.Schema({
+    date: Date,
     userId: { type: String, required: true, },
     orderId: { type: Number, require: true, unique: true },
+    username: { type: String, required: true },
     shippingInfo: {
-        username: { type: String, requireed: true },
         phone: { type: String, rquireed: true },
         address: { 
             street: { type: String, required: true },
