@@ -100,8 +100,9 @@ app.use('/userOrders', async (req, res) => {
 app.use('/userOrder', async (req, res) => {
   try {
     const order = await Order.findOne(req.body);
-
-    return res.status(200).send(order);
+    if (order.userId === req.body.userId) {
+      return res.status(200).send(order);
+    }
   } catch (err) {
     console.log(err);
   }
