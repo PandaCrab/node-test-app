@@ -14,9 +14,30 @@ app.use(express.json());
 app.get('/storage', async (req, res) => {
   try {
       const allProducts = await Product.find().lean();
-      return res.status(200).json(allProducts);
+      return res.status(200).send(allProducts);
   } catch (error) {
       console.log(error.message);
+  }
+});
+
+app.post('/storage', async (req, res) => {
+  try {
+    const newProduct = new Product({ ...req.body });
+    const insertedProduct = await newProduct.save();
+
+    return res.status(201).json(insertedProduct);
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+app.delete('/storage', async (req, res) => {
+  try {
+    const deletedProduct = await Product.findOneAndDelete(req.body);
+    
+    return res.status(200).send({ message: `Product ${deletedProduct.name} was remove from storage` });
+  } catch (err) {
+    console.log(err);
   }
 });
 
@@ -33,17 +54,6 @@ app.use('/users', async (req, res) => {
       });
   } catch (err) {
     console.log(err);
-  }
-});
-
-app.post('/storage', async (req, res) => {
-  try {
-    const newProduct = new Product({ ...req.body });
-    const insertedProduct = await newProduct.save();
-
-    return res.status(201).json(insertedProduct);
-  } catch (err) {
-    console.log(err)
   }
 });
 
