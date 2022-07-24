@@ -35,10 +35,18 @@ app.delete('/storage', async (req, res) => {
   try {
     const deletedProduct = await Product.findOneAndDelete(req.body);
     
-    return res.status(200).send({ message: `Product ${deletedProduct.name} was remove from storage` });
+    return res.status(200).send({ message: `Product "${deletedProduct.name}" has been removed from storage` });
   } catch (err) {
     console.log(err);
   }
+});
+
+app.put('/storage', async (req, res) => {
+  const { _id } = req.body;
+  await Product.updateOne({ _id }, req.body);
+  const product = await Product.findOne({ _id });
+
+  return res.status(201).send({ message: `Information about "${product.name}" has been updated` })
 });
 
 app.use('/users', async (req, res) => {
