@@ -29,10 +29,13 @@ const User = mongoose.model('auth', authSchema);
 
 const registrationSchema = new mongoose.Schema({
     date: Date,
-    email: { type: String, required: true, unique: true },
+    email: { 
+        type: String, 
+        required: true
+    },
     username: { type: String, required: true },
     password: { type: String, required: true },
-    phone: { type: Number, required: true, unique: true },
+    phone: { type: Number, required: true },
     age: Number
 }, { collection: 'users' });
 
@@ -53,16 +56,14 @@ const OrderSchema = mongoose.Schema({
     userId: { type: String, required: true, },
     orderId: { type: Number, require: true, unique: true },
     username: { type: String, required: true },
-    shippingInfo: {
-        phone: { type: String, rquireed: true },
-        address: { 
-            street: { type: String, required: true },
-            city: { type: String, required: true },
-            country: { type: String, required: true },
-            zip: { type: String, required: true }
-         },
-        optional: String
-    },
+    phone: { type: String, rquireed: true },
+    optional: String,
+    shippingInfo: { 
+        street: { type: String, required: true },
+        city: { type: String, required: true },
+        country: { type: String, required: true },
+        zip: { type: String, required: true }
+        },
     orderInfo: {
         products: [Object]
     }

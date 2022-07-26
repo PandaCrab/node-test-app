@@ -107,7 +107,6 @@ app.post('/orders', async (req, res) => {
 app.use('/userOrders', async (req, res) => {
   try {
     const userOrders = await Order.find(req.body);
-    console.log(req.body)
 
     return res.send(userOrders);
   } catch (err) {
@@ -128,10 +127,11 @@ app.use('/userOrder', async (req, res) => {
 
 app.use('/registration', async (req, res) => {
   try {
-    const isBusy = await User.findOne(req.body);
-    const body = req.body;
-
-    if (!isBusy) {
+    const isExist = await User.findOne({ email: req.body.email });
+    
+    if (isExist && (isExist.email === req.body.email)) {
+      return res.send({ duplicate: 'The email address already exists' });
+    } else if (!isExist) {
       const newUser = new Registration({ ...req.body });
       const insertUser = await newUser.save();
 
@@ -145,16 +145,13 @@ app.use('/registration', async (req, res) => {
           address: insertUser.address
         },
         message: 'ok'
-      })
-    } 
-    
-    if (isBusy.email && body.email === isBusy.email) {
-      return res.send('Email alredy exists');
+      });
+    } else {
+      return
     }
-
-    return res.send('Somthing wrong');
   } catch (err) {
     console.log(err);
+    return res.send(err.message);
   }
 });
 
