@@ -58,7 +58,8 @@ app.use('/users', async (req, res) => {
         email: findUser.email,
         phone: findUser.phone,
         admin: findUser?.admin,
-        age: findUser?.age
+        age: findUser?.age,
+        likes: findUser?.likes
       });
   } catch (err) {
     console.log(err);
@@ -78,7 +79,8 @@ app.use('/auth', async (req, res) => {
           username: findUser.username,
           phone: findUser.phone,
           admin: findUser.admin,
-          age: findUser.age
+          age: findUser.age,
+          likes: findUser.likes
         },
         message: 'Ok'
       });
@@ -120,6 +122,31 @@ app.use('/userOrder', async (req, res) => {
     if (order.userId === req.body.userId) {
       return res.status(200).send(order);
     }
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+app.use('/userLikes', async (req, res) => {
+  try {
+    const userProfile = await UserInfo.findOne({ _id: req.body.userId });
+    const findLike = userProfile.likes.find(element => element._id === req.body.like);
+
+    if (findLike) {
+      await UserInfo.updateOne({ _id: req.body.userId }, {$pull: {
+        likes: { _id: req.body.like }
+      }});
+      res.send({ message: 'unlike' });
+    }
+
+    if (!findLike) {
+      await UserInfo.updateOne({ _id: req.body.userId }, {$push: {
+        likes: { _id: req.body.like }
+      }});
+      res.send({ message: 'like' });
+    }
+
+    return
   } catch (err) {
     console.log(err);
   }

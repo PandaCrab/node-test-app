@@ -22,7 +22,8 @@ const authSchema = new mongoose.Schema({
     email: String,
     age: String,
     phone: Number,
-    admin: Boolean
+    admin: Boolean,
+    likes: Array
 }, { collection: 'users' });
 
 const User = mongoose.model('auth', authSchema);
@@ -46,7 +47,8 @@ const UserSchema = mongoose.Schema({
     username: String,
     phone: Number,
     admin: Boolean,
-    age: Number
+    age: Number,
+    likes: Array
 });
 
 const UserInfo = mongoose.model('users', UserSchema);
