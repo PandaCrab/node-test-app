@@ -20,6 +20,17 @@ app.get('/storage', async (req, res) => {
   }
 });
 
+app.get('/storage/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const product = await Product.findById(id);
+    
+    return res.send(product);
+  } catch (err) {
+    console.log(err);
+  }
+});
+
 app.post('/storage', async (req, res) => {
   try {
     const newProduct = new Product({ ...req.body });

@@ -8,7 +8,8 @@ const productSchema = new mongoose.Schema({
     color: String,
     quantity: { type: Number, required: true },
     width: Number,
-    height: Number
+    height: Number,
+    description: String
 }, {
     collection: 'storage'
 });
