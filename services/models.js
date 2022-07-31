@@ -24,7 +24,8 @@ const authSchema = new mongoose.Schema({
     age: String,
     phone: Number,
     admin: Boolean,
-    likes: Array
+    likes: Array,
+    shippingAddress: Object
 }, { collection: 'users' });
 
 const User = mongoose.model('auth', authSchema);
@@ -38,7 +39,7 @@ const registrationSchema = new mongoose.Schema({
     username: { type: String, required: true },
     password: { type: String, required: true },
     phone: { type: Number, required: true },
-    age: Number
+    age: Number,
 }, { collection: 'users' });
 
 const Registration = mongoose.model('registration', registrationSchema);
@@ -49,7 +50,8 @@ const UserSchema = mongoose.Schema({
     phone: Number,
     admin: Boolean,
     age: Number,
-    likes: Array
+    likes: Array,
+    shippingInfo: Object
 });
 
 const UserInfo = mongoose.model('users', UserSchema);

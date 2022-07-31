@@ -13,8 +13,9 @@ app.use(express.json());
 
 app.get('/storage', async (req, res) => {
   try {
-      const allProducts = await Product.find().lean();
-      return res.status(200).send(allProducts);
+    const allProducts = await Product.find().lean();
+    return res.status(200).send(allProducts);
+      
   } catch (error) {
       console.log(error.message);
   }
@@ -33,6 +34,13 @@ app.get('/storage/:id', async (req, res) => {
 
 app.post('/storage', async (req, res) => {
   try {
+    if (req.body.length) {
+      const ids = req.body.map(id => id._id);
+      const someProducts = await Product.find({ '_id': { $in: ids } });
+      
+      return res.send(someProducts);
+    } 
+
     const newProduct = new Product({ ...req.body });
     const insertedProduct = await newProduct.save();
 
