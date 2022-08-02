@@ -51,7 +51,7 @@ const UserSchema = mongoose.Schema({
     admin: Boolean,
     age: Number,
     likes: Array,
-    shippingInfo: Object
+    ShippingAddress: Object,
 });
 
 const UserInfo = mongoose.model('users', UserSchema);
