@@ -25,7 +25,12 @@ const authSchema = new mongoose.Schema({
     phone: Number,
     admin: Boolean,
     likes: Array,
-    shippingAddress: Object
+    ShippingAddress: {
+        street: String,
+        city: String,
+        country: String,
+        zip: Number
+    }
 }, { collection: 'users' });
 
 const User = mongoose.model('auth', authSchema);
@@ -51,7 +56,12 @@ const UserSchema = mongoose.Schema({
     admin: Boolean,
     age: Number,
     likes: Array,
-    ShippingAddress: Object,
+    ShippingAddress: {
+        street: String,
+        city: String,
+        country: String,
+        zip: Number
+    },
 });
 
 const UserInfo = mongoose.model('users', UserSchema);
