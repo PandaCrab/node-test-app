@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 
 const productSchema = new mongoose.Schema({
-    id: { type: Number, rquired: true },
     name: { type: String, required: true }, 
     price: { type: Number, required: true },
     imgUrl: { type: String, required: true },
@@ -48,6 +47,7 @@ const UserSchema = mongoose.Schema({
     email: String,
     username: String,
     phone: Number,
+    password: String,
     admin: Boolean,
     age: Number,
     likes: Array,

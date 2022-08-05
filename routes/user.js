@@ -15,7 +15,7 @@ router.get('/:id', async (req, res) => {
             admin: findUser?.admin,
             age: findUser?.age,
             likes: findUser?.likes,
-            shippingAddress: findUser.shippingAddress
+            shippingAddress: findUser?.shippingAddress
         });
     } catch (err) {
         console.log(err);
@@ -23,7 +23,6 @@ router.get('/:id', async (req, res) => {
 });
 
 router.put('/:id', async (req, res) => {
-    const body = req.body;
     try {
         const { id } = req.params;
         await UserInfo.updateOne({ _id: id }, req.body, { upsert: true });
@@ -31,7 +30,7 @@ router.put('/:id', async (req, res) => {
         const findUser = await UserInfo.findOne({ _id: id});
 
         res.status(200).send({updated: {
-            _id: findUser._id,
+            id: findUser._id,
             username: findUser.username,
             email: findUser.email,
             phone: findUser.phone,
@@ -49,31 +48,16 @@ router.put('/:id', async (req, res) => {
 router.delete('/:id', async (req, res) => {
     try {
         const { id } = req.params;
-        const deleteUser = await UserInfo.findOneAndDelete({ _id: id});
+        const checkUser = await UserInfo.findOne({ _id: id });
 
-        if (deleteUser) {
-            res.status(200).send({ message: 'Account was deleted' });
-        }
-    } catch (err) {
-        console.log(err);
-    }
-});
+        if (checkUser.password === req.body.password) {
+            const deleteUser = await UserInfo.findOneAndDelete({ _id: id});
 
-router.get('/orders', async (req, res) => {
-    try {
-        const userOrders = await Order.find(req.body);
-
-        return res.send(userOrders);
-    } catch (err) {
-        console.log(err);
-    }
-});
-  
-router.use('/order', async (req, res) => {
-    try {
-        const order = await Order.findOne(req.body);
-        if (order.userId === req.body.userId) {
-        return res.status(200).send(order);
+            if (deleteUser) {
+                res.status(200).send({ message: 'Account was deleted' });
+            }
+        } else {
+            res.send({ error: 'Incorrect password' });
         }
     } catch (err) {
         console.log(err);
