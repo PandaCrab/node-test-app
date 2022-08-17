@@ -71,10 +71,10 @@ router.delete('/:id', async (req, res) => {
 router.put('/', async (req, res) => {
     try {
         const { userId, stuffId } = req.body;
-        console.log(userId, stuffId);
+
         const userProfile = await UserInfo.findOne({ _id: userId });
         const findLike = userProfile?.likes.find((element) => element._id === stuffId);
-        console.log(userProfile);
+
         if (findLike) {
             await UserInfo.updateOne(
                 { _id: userId },
