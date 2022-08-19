@@ -22,6 +22,10 @@ app.use('/storage', storageRouter);
 
 app.use('/orders', ordersRouter);
 
+app.get('/', (req, res) => {
+  res.send('Hello, you look on server')
+})
+
 app.use((err, req, res, next) => {
   const statusCode = err.statusCode || 500;
   console.error(err.message, err.stack);
