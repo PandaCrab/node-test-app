@@ -22,6 +22,26 @@ router.get('/:id', async (req, res) => {
     }
 });
 
+router.get('/categories/:category/:subcategory', async (req, res) => {
+    try {
+        const { category, subCategory } = req.params;
+
+        if (category && subCategory) {
+            const subProducts = await Product.find({ subCategory });
+
+            return res.send(subProducts);
+        }
+
+        if (category && !subCategory) {
+            const products = await Product.find({ category });
+
+            return res.send(products);
+        }
+    } catch (err) {
+        console.log(err);
+    }
+});
+
 router.post('/', async (req, res) => {
     try {
         if (req.body.length) {
