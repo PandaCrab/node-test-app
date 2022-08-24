@@ -24,10 +24,10 @@ router.get('/:id', async (req, res) => {
 
 router.get('/categories/:category/:subcategory', async (req, res) => {
     try {
-        const { category, subCategory } = req.params;
-
-        if (category && subCategory) {
-            const subProducts = await Product.find({ subCategory });
+        const { category, subcategory } = req.params;
+        console.log(req.params);
+        if (category && subcategory) {
+            const subProducts = await Product.find({ subCategory: subcategory });
 
             return res.send(subProducts);
         }

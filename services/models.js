@@ -10,6 +10,8 @@ const productSchema = new mongoose.Schema(
         width: Number,
         height: Number,
         description: String,
+        category: String,
+        subCategory: String,
     },
     {
         collection: 'storage',
