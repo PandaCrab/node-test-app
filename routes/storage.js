@@ -22,19 +22,33 @@ router.get('/:id', async (req, res) => {
     }
 });
 
+router.get('/categories/:category', async (req, res) => {
+    try {
+        const { category } = req.params;
+
+        if (category) {
+            const products = await Product.find({ category });
+
+            return res.send(products);
+        }
+    } catch (err) {
+        console.log(err);
+    }
+});
+
 router.get('/categories/:category/:subcategory', async (req, res) => {
     try {
         const { category, subcategory } = req.params;
-        console.log(req.params);
+
         if (category && subcategory) {
             const subProducts = await Product.find({ subCategory: subcategory });
 
             return res.send(subProducts);
         }
 
-        if (category && !subCategory) {
+        if (!subcategory && category) {
             const products = await Product.find({ category });
-
+            console.log(req.params);
             return res.send(products);
         }
     } catch (err) {
