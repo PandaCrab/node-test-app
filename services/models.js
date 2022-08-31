@@ -11,7 +11,7 @@ const productSchema = new mongoose.Schema(
         height: Number,
         description: String,
         category: String,
-        subCategory: String,
+        subcategory: String,
     },
     {
         collection: 'storage',

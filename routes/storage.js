@@ -41,7 +41,7 @@ router.get('/categories/:category/:subcategory', async (req, res) => {
         const { category, subcategory } = req.params;
 
         if (category && subcategory) {
-            const subProducts = await Product.find({ subCategory: subcategory });
+            const subProducts = await Product.find({ subcategory });
 
             return res.send(subProducts);
         }
