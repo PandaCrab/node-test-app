@@ -12,6 +12,13 @@ const productSchema = new mongoose.Schema(
         description: String,
         category: String,
         subcategory: String,
+        stars: {
+            five: Number,
+            four: Number,
+            three: Number,
+            two: Number,
+            one: Number
+        }
     },
     {
         collection: 'storage',
