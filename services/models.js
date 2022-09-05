@@ -70,6 +70,7 @@ const UserSchema = mongoose.Schema({
     age: Number,
     likes: Array,
     shippingAddress: Object,
+    rated: Array
 });
 
 const UserInfo = mongoose.model('users', UserSchema);

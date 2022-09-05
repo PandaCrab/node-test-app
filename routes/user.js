@@ -1,5 +1,4 @@
 const express = require('express');
-const { isObjectIdOrHexString } = require('mongoose');
 const router = express.Router();
 const { UserInfo } = require('../services/models');
 
@@ -17,7 +16,46 @@ router.get('/:id', async (req, res) => {
             age: findUser?.age,
             likes: findUser?.likes,
             shippingAddress: findUser?.shippingAddress,
+            rated: findUser?.rated
         });
+    } catch (err) {
+        console.log(err);
+    }
+});
+
+router.put('/ratedProduct', async (req, res) => {
+    try {
+        const { userId, ratedProduct } = req.body;
+console.log(ratedProduct);
+        const userProfile = await UserInfo.findOne({ _id: userId }).lean();
+        const findRatedProduct = await userProfile?.rated?.find((element) =>  element.productId === ratedProduct.id);
+        if (Object.keys(userProfile).includes('rated') && !findRatedProduct) {
+            
+            await UserInfo.updateOne(
+                { _id: userId },
+                {
+                    $push: {
+                        rated: {
+                            productId: ratedProduct.id,
+                            rated: ratedProduct.rated
+                        }
+                    }
+                }
+            );
+        }
+
+        if (!Object.keys(userProfile).includes('rated')) {
+            
+            await UserInfo.updateOne(
+                { _id: userId },
+                {
+                    rated: {
+                        productId: ratedProduct.id,
+                        rated: ratedProduct.rated
+                    }
+                }
+            );
+        }
     } catch (err) {
         console.log(err);
     }

@@ -48,7 +48,7 @@ router.get('/categories/:category/:subcategory', async (req, res) => {
 
         if (!subcategory && category) {
             const products = await Product.find({ category });
-            console.log(req.params);
+            
             return res.send(products);
         }
     } catch (err) {
@@ -66,7 +66,7 @@ router.post('/', async (req, res) => {
         }
 
         const newProduct = new Product({ ...req.body });
-        const insertedProduct = await newProduct.save();
+        await newProduct.save();
 
         return res.status(201).json({ message: 'Product was created' });
     } catch (err) {

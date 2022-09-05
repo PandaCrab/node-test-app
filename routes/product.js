@@ -7,7 +7,7 @@ router.put('/:_id/rating', async (req, res) => {
     const { rated } = req.body;
 
     const product = await Product.findOne({ _id }).lean();
-console.log(req.params, req.body)
+
     if (Object.keys(product).includes('stars')) {
         const { stars } = product;
 
@@ -20,6 +20,10 @@ console.log(req.params, req.body)
         };
 
         await Product.updateOne({ _id }, { stars: updatedRating });
+
+        const updatedProducts = await Product.find().lean();
+        
+        return res.send(updatedProducts);
     };
 
     if (!Object.keys(product).includes('stars')) {
@@ -32,6 +36,10 @@ console.log(req.params, req.body)
         }; 
 
         await Product.updateOne({ _id }, {stars: updatedRating});
+
+        const updatedProducts = await Product.find().lean();
+        
+        return res.send(updatedProducts);
     }
 });
 
