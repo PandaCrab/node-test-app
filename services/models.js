@@ -18,7 +18,8 @@ const productSchema = new mongoose.Schema(
             three: Number,
             two: Number,
             one: Number
-        }
+        },
+        comments: Array,
     },
     {
         collection: 'storage',

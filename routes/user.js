@@ -26,7 +26,7 @@ router.get('/:id', async (req, res) => {
 router.put('/ratedProduct', async (req, res) => {
     try {
         const { userId, ratedProduct } = req.body;
-console.log(ratedProduct);
+
         const userProfile = await UserInfo.findOne({ _id: userId }).lean();
         const findRatedProduct = await userProfile?.rated?.find((element) =>  element.productId === ratedProduct.id);
         if (Object.keys(userProfile).includes('rated') && !findRatedProduct) {

@@ -43,4 +43,27 @@ router.put('/:_id/rating', async (req, res) => {
     }
 });
 
+router.put('/:_id/addComments', async (req, res) => {
+    try {
+        const { _id } = req.params;
+        const product = await Product.findOne({ _id }).lean();
+
+        if (Object.keys(product).includes('comments')) {
+            await Product.updateOne({ _id }, {
+                $push: {
+                    comments: req.body
+                },
+            });
+        }
+
+        if (!Object.keys(product).includes('comments')) {
+            await Product.updateOne({ _id }, {
+                comments: [req.body]
+            });
+        }
+    } catch (err) {
+        console.log(err);
+    }
+});
+
 module.exports = router;
