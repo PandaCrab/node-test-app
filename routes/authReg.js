@@ -10,7 +10,7 @@ router.use('/auth', async (req, res) => {
             res.send({
                 token: findUser._id,
                 user: {
-                    id: findUser._id,
+                    _id: findUser._id,
                     emai: findUser.email,
                     username: findUser.username,
                     phone: findUser.phone,
@@ -45,7 +45,7 @@ router.use('/registration', async (req, res) => {
             return res.send({
                 token: insertUser._id,
                 user: {
-                    id: insertUser._id,
+                    _id: insertUser._id,
                     email: insertUser.email,
                     phone: insertUser.phone,
                     username: insertUser.username,

@@ -19,7 +19,7 @@ router.put('/:_id/rating', async (req, res) => {
             one: rated === 1 ? stars.one + 1 : stars.one
         };
 
-        await Product.updateOne({ _id }, { stars: updatedRating });
+        await Product.updateOne({ _id }, { stars: updatedRating }, { new: true });
 
         const updatedProducts = await Product.find().lean();
         
@@ -35,7 +35,7 @@ router.put('/:_id/rating', async (req, res) => {
             one: rated === 1 ? 1 : 0
         }; 
 
-        await Product.updateOne({ _id }, {stars: updatedRating});
+        await Product.updateOne({ _id }, {stars: updatedRating}, { new: true });
 
         const updatedProducts = await Product.find().lean();
         
@@ -49,17 +49,26 @@ router.put('/:_id/addComments', async (req, res) => {
         const product = await Product.findOne({ _id }).lean();
 
         if (Object.keys(product).includes('comments')) {
-            await Product.updateOne({ _id }, {
+            const updated = await Product.findOneAndUpdate({ _id }, {
                 $push: {
                     comments: req.body
                 },
+            }, 
+            { 
+                new: true 
             });
+            return res.send(updated);
         }
 
         if (!Object.keys(product).includes('comments')) {
-            await Product.updateOne({ _id }, {
+            const updated = await Product.findeOneAndUpdate({ _id }, {
                 comments: [req.body]
+            }, 
+            {
+                new: true
             });
+
+            res.send(updated)
         }
     } catch (err) {
         console.log(err);

@@ -19,7 +19,13 @@ const productSchema = new mongoose.Schema(
             two: Number,
             one: Number
         },
-        comments: Array,
+        comments: [{
+            userId: String | null,
+            userAvatar: String | null,
+            userName: String | null,
+            createdDate: Date,
+            message: String
+        }],
     },
     {
         collection: 'storage',

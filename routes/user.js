@@ -8,7 +8,7 @@ router.get('/:id', async (req, res) => {
         const findUser = await UserInfo.findOne({ _id: id });
 
         return res.send({
-            id: findUser._id,
+            _id: findUser._id,
             username: findUser.username,
             email: findUser.email,
             phone: findUser.phone,
@@ -31,7 +31,7 @@ router.put('/ratedProduct', async (req, res) => {
         const findRatedProduct = await userProfile?.rated?.find((element) =>  element.productId === ratedProduct.id);
         if (Object.keys(userProfile).includes('rated') && !findRatedProduct) {
             
-            await UserInfo.updateOne(
+            const updated = await UserInfo.findOneAndUpdate(
                 { _id: userId },
                 {
                     $push: {
@@ -40,21 +40,31 @@ router.put('/ratedProduct', async (req, res) => {
                             rated: ratedProduct.rated
                         }
                     }
+                },
+                {
+                    new: true,
                 }
             );
+
+            return res.send(updated);
         }
 
         if (!Object.keys(userProfile).includes('rated')) {
             
-            await UserInfo.updateOne(
+            const updated = await UserInfo.findOneAndUpdate(
                 { _id: userId },
                 {
                     rated: {
                         productId: ratedProduct.id,
                         rated: ratedProduct.rated
                     }
+                },
+                {
+                    new: true
                 }
             );
+
+            return res.send(updated);
         }
     } catch (err) {
         console.log(err);
