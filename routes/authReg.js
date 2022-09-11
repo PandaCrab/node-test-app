@@ -2,6 +2,16 @@ const express = require('express');
 const router = express.Router();
 const { User, Registration } = require('../services/models');
 
+const toUpperFirstLetter = (string) => {
+    const capitizedString = string.split(' ');
+
+    for (let i = 0; i < capitizedString.length; i++) {
+        capitizedString[i] = capitizedString[i].charAt(0).toUpperCase() + capitizedString[i].slice(1); 
+    }
+
+    return capitizedString.join(' ');
+};
+
 router.use('/auth', async (req, res) => {
     try {
         const findUser = await User.findOne(req.body);
@@ -12,7 +22,7 @@ router.use('/auth', async (req, res) => {
                 user: {
                     _id: findUser._id,
                     emai: findUser.email,
-                    username: findUser.username,
+                    username: toUpperFirstLetter(findUser.username),
                     phone: findUser.phone,
                     admin: findUser.admin,
                     age: findUser.age,
@@ -42,13 +52,19 @@ router.use('/registration', async (req, res) => {
             const newUser = new Registration({ ...req.body });
             const insertUser = await newUser.save();
 
+            const capitizedUsername = insertUser.username.split(' ');
+
+            for (let i = 0; i < capitizedUsername.length; i++) {
+                capitizedUsername[i] = capitizedUsername[i].chartAt(0).toUpperCase() + capitizedUsername.slice(1); 
+            }
+
             return res.send({
                 token: insertUser._id,
                 user: {
                     _id: insertUser._id,
                     email: insertUser.email,
                     phone: insertUser.phone,
-                    username: insertUser.username,
+                    username: toUpperFirstLetter(insertUser.username),
                     age: insertUser?.age
                 },
                 message: 'ok'

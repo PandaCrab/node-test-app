@@ -61,7 +61,7 @@ router.put('/:_id/addComments', async (req, res) => {
         }
 
         if (!Object.keys(product).includes('comments')) {
-            const updated = await Product.findeOneAndUpdate({ _id }, {
+            const updated = await Product.findOneAndUpdate({ _id }, {
                 comments: [req.body]
             }, 
             {

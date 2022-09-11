@@ -2,6 +2,16 @@ const express = require('express');
 const router = express.Router();
 const { UserInfo } = require('../services/models');
 
+const toUpperFirstLetter = (string) => {
+    const capitizedString = string.split(' ');
+
+    for (let i = 0; i < capitizedString.length; i++) {
+        capitizedString[i] = capitizedString[i].charAt(0).toUpperCase() + capitizedString[i].slice(1); 
+    }
+
+    return capitizedString.join(' ');
+};
+
 router.get('/:id', async (req, res) => {
     try {
         const { id } = req.params;
@@ -9,7 +19,7 @@ router.get('/:id', async (req, res) => {
 
         return res.send({
             _id: findUser._id,
-            username: findUser.username,
+            username: toUpperFirstLetter(findUser.username),
             email: findUser.email,
             phone: findUser.phone,
             admin: findUser?.admin,
@@ -81,7 +91,7 @@ router.put('/:id', async (req, res) => {
         res.status(200).send({
             updated: {
                 id: findUser._id,
-                username: findUser.username,
+                username: toUpperFirstLetter(findUser.username),
                 email: findUser.email,
                 phone: findUser.phone,
                 admin: findUser?.admin,
