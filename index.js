@@ -26,28 +26,28 @@ app.use('/orders', ordersRouter);
 app.use('/product', productRouter);
 
 app.get('/', (req, res) => {
-  res.send('Hello, you look on server')
-})
+	res.send('Hello, you look on server');
+});
 
 app.use((err, req, res, next) => {
-  const statusCode = err.statusCode || 500;
-  console.error(err.message, err.stack);
-  res.status(statusCode).json({ message: err.message });
-  return;
+	const statusCode = err.statusCode || 500;
+	console.error(err.message, err.stack);
+	res.status(statusCode).json({ message: err.message });
+	return;
 });
 
 const start = async () => {
-  try {
-    await main();
-    
-    app.listen(PORT, () => {
-      console.log(`Server listening on ${PORT}`);
-    });
-  } catch(err) {
-    console.log(err);
+	try {
+		await main();
 
-    process.exit(1);
-  }
+		app.listen(PORT, () => {
+			console.log(`Server listening on ${PORT}`);
+		});
+	} catch (err) {
+		console.log(err);
+
+		process.exit(1);
+	}
 };
 
 start();
