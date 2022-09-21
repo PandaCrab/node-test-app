@@ -1,4 +1,5 @@
 const express = require('express');
+
 const router = express.Router();
 const { UserInfo } = require('../services/models');
 
@@ -18,7 +19,7 @@ router.get('/:id', async (req, res) => {
             age: findUser?.age,
             likes: findUser?.likes,
             shippingAddress: findUser?.shippingAddress,
-            rated: findUser?.rated
+            rated: findUser?.rated,
         });
     } catch (err) {
         console.log(err);
@@ -30,37 +31,31 @@ router.put('/ratedProduct', async (req, res) => {
         const { userId, ratedProduct } = req.body;
 
         const userProfile = await UserInfo.findOne({ _id: userId }).lean();
-        const findRatedProduct = await userProfile?.rated?.find((element) =>  element.productId === ratedProduct.id);
+        const findRatedProduct = await userProfile?.rated?.find((element) => element.productId === ratedProduct.id);
         if (Object.keys(userProfile).includes('rated') && !findRatedProduct) {
-            
-            const updated = await UserInfo.findOneAndUpdate(
-                { _id: userId }, {
-                    $push: {
-                        rated: {
-                            productId: ratedProduct.id,
-                            rated: ratedProduct.rated
-                        }
-                    }
-                }, {
-                    new: true,
-                }
-            );
+            const updated = await UserInfo.findOneAndUpdate({ _id: userId }, {
+                $push: {
+                    rated: {
+                        productId: ratedProduct.id,
+                        rated: ratedProduct.rated,
+                    },
+                },
+            }, {
+                new: true,
+            });
 
             return res.send(updated);
         }
 
         if (!Object.keys(userProfile).includes('rated')) {
-            
-            const updated = await UserInfo.findOneAndUpdate(
-                { _id: userId }, {
-                    rated: {
-                        productId: ratedProduct.id,
-                        rated: ratedProduct.rated
-                    }
-                }, {
-                    new: true
-                }
-            );
+            const updated = await UserInfo.findOneAndUpdate({ _id: userId }, {
+                rated: {
+                    productId: ratedProduct.id,
+                    rated: ratedProduct.rated,
+                },
+            }, {
+                new: true,
+            });
 
             return res.send(updated);
         }
@@ -122,25 +117,21 @@ router.put('/', async (req, res) => {
         const findLike = userProfile?.likes.find((element) => element._id === stuffId);
 
         if (findLike) {
-            await UserInfo.updateOne(
-                { _id: userId }, {
-                    $pull: {
-                        likes: { _id: stuffId },
-                    },
-                }
-            );
+            await UserInfo.updateOne({ _id: userId }, {
+                $pull: {
+                    likes: { _id: stuffId },
+                },
+            });
 
             res.send({ message: 'unlike' });
         }
 
         if (!findLike) {
-            await UserInfo.updateOne(
-                { _id: userId }, {
-                    $push: {
-                        likes: { _id: stuffId },
-                    },
-                }
-            );
+            await UserInfo.updateOne({ _id: userId }, {
+                $push: {
+                    likes: { _id: stuffId },
+                },
+            });
 
             res.send({ message: 'like' });
         }

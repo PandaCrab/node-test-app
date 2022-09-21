@@ -1,4 +1,5 @@
 const express = require('express');
+
 const router = express.Router();
 const { User, Registration } = require('../services/models');
 
@@ -7,7 +8,7 @@ const { toUpperFirstLetter } = require('../utils');
 router.use('/auth', async (req, res) => {
     try {
         const findUser = await User.findOne(req.body);
-        
+
         if (findUser && req.body.password === findUser.password) {
             res.send({
                 token: findUser._id,
@@ -19,14 +20,14 @@ router.use('/auth', async (req, res) => {
                     admin: findUser.admin,
                     age: findUser.age,
                     likes: findUser.likes,
-                    shippingAddress: findUser.shippingAddress
+                    shippingAddress: findUser.shippingAddress,
                 },
-                message: 'Ok'
+                message: 'Ok',
             });
         } else {
             res.send({
                 token: '',
-                message: 'Incorrect name or password'
+                message: 'Incorrect name or password',
             });
         }
     } catch (err) {
@@ -37,17 +38,17 @@ router.use('/auth', async (req, res) => {
 router.use('/registration', async (req, res) => {
     try {
         const isExist = await User.findOne({ email: req.body.email });
-        
+
         if (isExist && (isExist.email === req.body.email)) {
             return res.send({ duplicate: 'The email address already exists' });
-        } else if (!isExist) {
+        } if (!isExist) {
             const newUser = new Registration({ ...req.body });
             const insertUser = await newUser.save();
 
             const capitizedUsername = insertUser.username.split(' ');
 
             for (let i = 0; i < capitizedUsername.length; i++) {
-                capitizedUsername[i] = capitizedUsername[i].chartAt(0).toUpperCase() + capitizedUsername.slice(1); 
+                capitizedUsername[i] = capitizedUsername[i].chartAt(0).toUpperCase() + capitizedUsername.slice(1);
             }
 
             return res.send({
@@ -57,13 +58,12 @@ router.use('/registration', async (req, res) => {
                     email: insertUser.email,
                     phone: insertUser.phone,
                     username: toUpperFirstLetter(insertUser.username),
-                    age: insertUser?.age
+                    age: insertUser?.age,
                 },
-                message: 'ok'
+                message: 'ok',
             });
-        } else {
-            return
         }
+        return;
     } catch (err) {
         console.log(err);
         return res.send(err.message);

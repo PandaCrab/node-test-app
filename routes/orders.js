@@ -1,4 +1,5 @@
 const express = require('express');
+
 const router = express.Router();
 const { Order } = require('../services/models');
 
@@ -7,7 +8,7 @@ router.post('/create', async (req, res) => {
         const newOrder = new Order({ ...req.body });
         const insertedOrder = await newOrder.save();
 
-        return res.status(201).json({orderId: insertedOrder.orderId})
+        return res.status(201).json({ orderId: insertedOrder.orderId });
     } catch (err) {
         console.log(err);
     }
@@ -22,11 +23,11 @@ router.post('/userOrders', async (req, res) => {
         console.log(err);
     }
 });
-  
+
 router.post('/userOrders/:id', async (req, res) => {
     try {
         const { id } = req.params;
-        const order = await Order.findOne({orderId: id});
+        const order = await Order.findOne({ orderId: id });
 
         if (order.userId === req.body.userId) {
             return res.status(200).send(order);

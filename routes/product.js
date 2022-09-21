@@ -1,4 +1,5 @@
 const express = require('express');
+
 const router = express.Router();
 const { Product } = require('../services/models');
 
@@ -15,7 +16,7 @@ router.put('/:_id/rating', async (req, res) => {
     await Product.updateOne({ _id }, { stars: updatedRating }, { new: true });
 
     const updatedProducts = await Product.find().lean();
-    
+
     return res.send(updatedProducts);
 });
 
@@ -27,22 +28,22 @@ router.put('/:_id/addComments', async (req, res) => {
         if (Object.keys(product).includes('comments')) {
             const updated = await Product.findOneAndUpdate({ _id }, {
                 $push: {
-                    comments: req.body
+                    comments: req.body,
                 },
-            }, { 
-                new: true 
+            }, {
+                new: true,
             });
             return res.send(updated);
         }
 
         if (!Object.keys(product).includes('comments')) {
             const updated = await Product.findOneAndUpdate({ _id }, {
-                comments: [req.body]
+                comments: [req.body],
             }, {
-                new: true
+                new: true,
             });
 
-            res.send(updated)
+            res.send(updated);
         }
     } catch (err) {
         console.log(err);

@@ -1,4 +1,5 @@
 const express = require('express');
+
 const router = express.Router();
 const { Product } = require('../services/models');
 
@@ -48,7 +49,7 @@ router.get('/categories/:category/:subcategory', async (req, res) => {
 
         if (!subcategory && category) {
             const products = await Product.find({ category });
-            
+
             return res.send(products);
         }
     } catch (err) {
