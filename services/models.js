@@ -19,8 +19,7 @@ const productSchema = new mongoose.Schema(
 			two: Number,
 			one: Number,
 		},
-		comments: [
-			{
+		comments: [{
 				userId: String | null,
 				userAvatar: String | null,
 				userName: String | null,
@@ -28,8 +27,7 @@ const productSchema = new mongoose.Schema(
 				message: String,
 			},
 		],
-	},
-	{
+	}, {
 		collection: 'storage',
 	}
 );
@@ -47,8 +45,7 @@ const authSchema = new mongoose.Schema(
 		admin: Boolean,
 		likes: Array,
 		shippingAddress: Object,
-	},
-	{ collection: 'users' }
+	}, { collection: 'users' }
 );
 
 const User = mongoose.model('auth', authSchema);

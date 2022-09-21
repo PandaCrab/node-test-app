@@ -2,15 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { UserInfo } = require('../services/models');
 
-const toUpperFirstLetter = (string) => {
-    const capitizedString = string.split(' ');
-
-    for (let i = 0; i < capitizedString.length; i++) {
-        capitizedString[i] = capitizedString[i].charAt(0).toUpperCase() + capitizedString[i].slice(1); 
-    }
-
-    return capitizedString.join(' ');
-};
+const { toUpperFirstLetter } = require('../utils');
 
 router.get('/:id', async (req, res) => {
     try {
@@ -42,16 +34,14 @@ router.put('/ratedProduct', async (req, res) => {
         if (Object.keys(userProfile).includes('rated') && !findRatedProduct) {
             
             const updated = await UserInfo.findOneAndUpdate(
-                { _id: userId },
-                {
+                { _id: userId }, {
                     $push: {
                         rated: {
                             productId: ratedProduct.id,
                             rated: ratedProduct.rated
                         }
                     }
-                },
-                {
+                }, {
                     new: true,
                 }
             );
@@ -62,14 +52,12 @@ router.put('/ratedProduct', async (req, res) => {
         if (!Object.keys(userProfile).includes('rated')) {
             
             const updated = await UserInfo.findOneAndUpdate(
-                { _id: userId },
-                {
+                { _id: userId }, {
                     rated: {
                         productId: ratedProduct.id,
                         rated: ratedProduct.rated
                     }
-                },
-                {
+                }, {
                     new: true
                 }
             );
@@ -135,8 +123,7 @@ router.put('/', async (req, res) => {
 
         if (findLike) {
             await UserInfo.updateOne(
-                { _id: userId },
-                {
+                { _id: userId }, {
                     $pull: {
                         likes: { _id: stuffId },
                     },
@@ -148,8 +135,7 @@ router.put('/', async (req, res) => {
 
         if (!findLike) {
             await UserInfo.updateOne(
-                { _id: userId },
-                {
+                { _id: userId }, {
                     $push: {
                         likes: { _id: stuffId },
                     },

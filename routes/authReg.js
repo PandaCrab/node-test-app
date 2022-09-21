@@ -2,15 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { User, Registration } = require('../services/models');
 
-const toUpperFirstLetter = (string) => {
-    const capitizedString = string.split(' ');
-
-    for (let i = 0; i < capitizedString.length; i++) {
-        capitizedString[i] = capitizedString[i].charAt(0).toUpperCase() + capitizedString[i].slice(1); 
-    }
-
-    return capitizedString.join(' ');
-};
+const { toUpperFirstLetter } = require('../utils');
 
 router.use('/auth', async (req, res) => {
     try {
