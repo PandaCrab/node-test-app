@@ -1,11 +1,8 @@
-const config = {
-    db: {
-        host: 'localhost',
-        user: 'root',
-        password: 'SneJe9496',
-        database: 'products'
-    },
-    listPerPage: 10
-};
+const dotenv = require('dotenv');
 
-module.exports = config;
+dotenv.config();
+
+module.exports = {
+    db_access: process.env.DB_ACCESS,
+    port: process.env.PORT,
+};

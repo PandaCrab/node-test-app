@@ -1,11 +1,12 @@
-const mysql = require('mysql2/promise');
-const config = require('../config');
+const mongoose = require('mongoose');
+// eslint-disable-next-line camelcase
+const { db_access } = require('../config');
 
-const query = async (sql, params) => {
-  const connection = await mysql.createConnection(config.db);
-  const [results] = await connection.execute(sql, params);
-  
-  return results;
+// eslint-disable-next-line camelcase
+const url = `mongodb+srv://${db_access}@testcluster.rbjaq.mongodb.net/Test`;
+
+const main = async () => {
+    await mongoose.connect(url);
 };
 
-module.exports = { query };
+module.exports = { main };
