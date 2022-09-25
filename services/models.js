@@ -21,7 +21,7 @@ const productSchema = new mongoose.Schema({
     comments: [{
         userId: String | null,
         userAvatar: String | null,
-        userName: String | null,
+        username: String | null,
         createdDate: Date,
         message: String,
     },
