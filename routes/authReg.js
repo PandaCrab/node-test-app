@@ -16,6 +16,7 @@ router.use('/auth', async (req, res) => {
                     _id: findUser._id,
                     emai: findUser.email,
                     username: toUpperFirstLetter(findUser.username),
+                    photo: findUser.photo,
                     phone: findUser.phone,
                     admin: findUser.admin,
                     age: findUser.age,

@@ -13,6 +13,7 @@ router.get('/:id', async (req, res) => {
         return res.send({
             _id: findUser._id,
             username: toUpperFirstLetter(findUser.username),
+            photo: findUser.photo,
             email: findUser.email,
             phone: findUser.phone,
             admin: findUser?.admin,
@@ -23,6 +24,20 @@ router.get('/:id', async (req, res) => {
         });
     } catch (err) {
         console.log(err);
+    }
+});
+
+router.put('/:_id/setAvatar', async (req, res) => {
+    try {
+        const { _id } = req.params;
+
+        await UserInfo.findOneAndUpdate({ _id }, {
+            photo: req.body.avatar,
+        });
+
+        return res.send({ message: 'Avatar is added' });
+    } catch (err) {
+        return res.status(400).send({ message: err.message });
     }
 });
 
@@ -77,6 +92,7 @@ router.put('/:id', async (req, res) => {
                 username: toUpperFirstLetter(findUser.username),
                 email: findUser.email,
                 phone: findUser.phone,
+                photo: findUser?.photo,
                 admin: findUser?.admin,
                 likes: findUser.likes,
                 age: findUser.age,

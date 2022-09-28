@@ -36,6 +36,7 @@ const authSchema = new mongoose.Schema({
     _id: String,
     username: { type: String, required: true },
     password: { type: String, required: true },
+    photo: String,
     email: String,
     age: String,
     phone: Number,
@@ -66,6 +67,7 @@ const Registration = mongoose.model('registration', registrationSchema);
 const UserSchema = mongoose.Schema({
     email: String,
     username: String,
+    photo: String,
     phone: Number,
     password: String,
     admin: Boolean,
