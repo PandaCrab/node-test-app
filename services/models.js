@@ -20,7 +20,7 @@ const productSchema = new mongoose.Schema({
     },
     comments: [{
         userId: String | null,
-        userAvatar: String | null,
+        photo: String | null | null,
         username: String | null,
         createdDate: Date,
         message: String,
@@ -36,7 +36,7 @@ const authSchema = new mongoose.Schema({
     _id: String,
     username: { type: String, required: true },
     password: { type: String, required: true },
-    photo: String,
+    photo: String | null,
     email: String,
     age: String,
     phone: Number,
@@ -67,7 +67,7 @@ const Registration = mongoose.model('registration', registrationSchema);
 const UserSchema = mongoose.Schema({
     email: String,
     username: String,
-    photo: String,
+    photo: String | null,
     phone: Number,
     password: String,
     admin: Boolean,
