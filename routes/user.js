@@ -88,13 +88,14 @@ router.put('/:id', async (req, res) => {
 
         res.status(200).send({
             updated: {
-                id: findUser._id,
+                _id: findUser._id,
                 username: toUpperFirstLetter(findUser.username),
                 email: findUser.email,
                 phone: findUser.phone,
                 photo: findUser?.photo,
                 admin: findUser?.admin,
                 likes: findUser.likes,
+                rated: findUser?.rated,
                 age: findUser.age,
                 shippingAddress: findUser.shippingAddress,
             },
