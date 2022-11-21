@@ -59,13 +59,24 @@ router.get('/categories/:category/:subcategory', async (req, res) => {
 
 router.post('/', async (req, res) => {
     try {
-        if (req.body.length) {
+        if (req.body.lenght) {
             const ids = req.body.map((id) => id._id);
             const someProducts = await Product.find({ _id: { $in: ids } });
 
             return res.send(someProducts);
         }
 
+        const newProduct = new Product({ ...req.body });
+        await newProduct.save();
+
+        return res.status(201).json({ message: 'Product was created' });
+    } catch (err) {
+        console.log(err);
+    }
+});
+
+router.post('/create', async (req, res) => {
+    try {
         const newProduct = new Product({ ...req.body });
         await newProduct.save();
 
