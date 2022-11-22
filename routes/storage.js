@@ -98,11 +98,27 @@ router.delete('/', async (req, res) => {
 
 router.put('/', async (req, res) => {
     const { _id } = req.body;
-    await Product.updateOne({ _id }, req.body);
+    const notUpdated = await Product.findOne({ _id }).lean();
 
-    const product = await Product.findOne({ _id });
+    const sameValues = Object.keys(notUpdated)
+        .filter((key) => key !== '_id' && key !== '__v' && key !== 'stars' && key !== 'comments')
+        .every((key) => notUpdated[key] === req.body[key]);
 
-    return res.status(201).send({ message: `Information about "${product.name}" has been updated` });
+    try {
+        if (sameValues) {
+            return res.status(304).send({ message: 'Information not changed for update' });
+        }
+
+        if (!sameValues) {
+            await Product.updateOne({ _id }, req.body);
+
+            const product = await Product.findOne({ _id });
+
+            return res.status(201).send({ message: `Information about "${product.name}" has been updated` });
+        }
+    } catch (err) {
+        console.log(err);
+    }
 });
 
 module.exports = router;
