@@ -106,7 +106,7 @@ router.put('/', async (req, res) => {
 
     try {
         if (sameValues) {
-            return res.status(304).send({ message: 'Information not changed for update' });
+            return res.status(304).send({ error: 'Information not changed for update' });
         }
 
         if (!sameValues) {
