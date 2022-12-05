@@ -1,7 +1,17 @@
 const express = require('express');
 
 const router = express.Router();
-const { Order, Product } = require('../services/models');
+const { Order, Product, OrderHistory } = require('../services/models');
+
+router.get('/', async (req, res) => {
+    try {
+        const orderHisory = await OrderHistory.find().lean();
+
+        return res.status(200).send(orderHisory);
+    } catch (err) {
+        console.log(err);
+    }
+});
 
 router.post('/create', async (req, res) => {
     try {

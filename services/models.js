@@ -103,6 +103,24 @@ const OrderSchema = mongoose.Schema({
 
 const Order = mongoose.model('orders', OrderSchema);
 
+const OrderHistorySchema = mongoose.Schema({
+    date: Date,
+    userId: String,
+    username: String,
+    orderInfo: {
+        products: [Object],
+    },
+    status: String | Boolean,
+    payment: {
+        payed: Boolean,
+        paymentType: String,
+    },
+}, {
+    collection: 'orders',
+});
+
+const OrderHistory = mongoose.model('orderHistory', OrderHistorySchema);
+
 module.exports = {
-    Product, User, Registration, UserInfo, Order,
+    Product, User, Registration, UserInfo, Order, OrderHistory,
 };
