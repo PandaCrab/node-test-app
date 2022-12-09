@@ -92,6 +92,7 @@ const OrderSchema = mongoose.Schema({
         country: { type: String, required: true },
         zip: { type: String, required: true },
     },
+    shippingStatus: String,
     orderInfo: {
         products: [Object],
     },

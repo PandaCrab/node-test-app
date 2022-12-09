@@ -13,6 +13,18 @@ router.get('/', async (req, res) => {
     }
 });
 
+router.get('/:id', async (req, res) => {
+    const _id = req.params.id;
+
+    try {
+        const order = await Order.findOne({ _id });
+
+        return res.status(200).send(order);
+    } catch (err) {
+        console.log(err);
+    }
+});
+
 router.post('/create', async (req, res) => {
     try {
         const productIds = req.body.orderInfo.products.map((product) => product._id);
