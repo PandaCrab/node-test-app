@@ -6,15 +6,29 @@ const { Product } = require('../services/models');
 router.get('/', async (req, res) => {
     try {
         const allProducts = await Product.find().lean();
+
         return res.status(200).send(allProducts);
     } catch (error) {
         console.log(error.message);
     }
 });
 
+router.post('/', async (req, res) => {
+    try {
+        const ids = req.body;
+
+        const products = await Product.find({ _id: { $in: ids } }).lean();
+
+        return res.send(products);
+    } catch (err) {
+        console.log(err);
+    }
+});
+
 router.get('/:id', async (req, res) => {
     try {
         const { id } = req.params;
+
         const product = await Product.findById(id);
 
         return res.send(product);
