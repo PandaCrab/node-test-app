@@ -47,12 +47,6 @@ router.use('/registration', async (req, res) => {
             const newUser = new Registration({ ...req.body });
             const insertUser = await newUser.save();
 
-            const capitizedUsername = insertUser.username.split(' ');
-
-            for (let i = 0; i < capitizedUsername.length; i++) {
-                capitizedUsername[i] = capitizedUsername[i].chartAt(0).toUpperCase() + capitizedUsername.slice(1);
-            }
-
             return res.send({
                 token: insertUser._id,
                 user: {
