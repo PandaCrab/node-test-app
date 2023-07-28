@@ -16,11 +16,11 @@ router.get('/:id', async (req, res) => {
             photo: findUser.photo,
             email: findUser.email,
             phone: findUser.phone,
-            admin: findUser?.admin,
-            age: findUser?.age,
-            likes: findUser?.likes,
-            shippingAddress: findUser?.shippingAddress,
-            rated: findUser?.rated,
+            admin: findUser.admin,
+            age: findUser.age,
+            likes: findUser.likes,
+            shippingAddress: findUser.shippingAddress,
+            rated: findUser.rated,
         });
     } catch (err) {
         console.log(err);
@@ -46,7 +46,7 @@ router.put('/ratedProduct', async (req, res) => {
         const { userId, ratedProduct } = req.body;
 
         const userProfile = await UserInfo.findOne({ _id: userId }).lean();
-        const findRatedProduct = await userProfile?.rated?.find((element) => element.productId === ratedProduct.id);
+        const findRatedProduct = await userProfile.rated.find((element) => element.productId === ratedProduct.id);
         if (Object.keys(userProfile).includes('rated') && !findRatedProduct) {
             const updated = await UserInfo.findOneAndUpdate({ _id: userId }, {
                 $push: {
@@ -92,10 +92,10 @@ router.put('/:id', async (req, res) => {
                 username: toUpperFirstLetter(findUser.username),
                 email: findUser.email,
                 phone: findUser.phone,
-                photo: findUser?.photo,
-                admin: findUser?.admin,
+                photo: findUser.photo,
+                admin: findUser.admin,
                 likes: findUser.likes,
-                rated: findUser?.rated,
+                rated: findUser.rated,
                 age: findUser.age,
                 shippingAddress: findUser.shippingAddress,
             },
@@ -131,7 +131,7 @@ router.put('/', async (req, res) => {
         const { userId, stuffId } = req.body;
 
         const userProfile = await UserInfo.findOne({ _id: userId });
-        const findLike = userProfile?.likes.find((element) => element._id === stuffId);
+        const findLike = userProfile.likes.find((element) => element._id === stuffId);
 
         if (findLike) {
             await UserInfo.updateOne({ _id: userId }, {

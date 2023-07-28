@@ -1,4 +1,4 @@
 .git
 .env
-node_moduls
+/node_moduls
 bin
