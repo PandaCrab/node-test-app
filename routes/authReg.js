@@ -14,13 +14,15 @@ router.use('/auth', async (req, res) => {
                 token: findUser._id,
                 user: {
                     _id: findUser._id,
-                    emai: findUser.email,
+                    email: findUser.email,
                     username: toUpperFirstLetter(findUser.username),
+                    photo: findUser?.photo,
                     phone: findUser.phone,
-                    admin: findUser.admin,
-                    age: findUser.age,
-                    likes: findUser.likes,
-                    shippingAddress: findUser.shippingAddress,
+                    admin: findUser?.admin,
+                    age: findUser?.age,
+                    likes: findUser?.likes,
+                    rated: findUser?.rated,
+                    shippingAddress: findUser?.shippingAddress,
                 },
                 message: 'Ok',
             });
@@ -44,12 +46,6 @@ router.use('/registration', async (req, res) => {
         } if (!isExist) {
             const newUser = new Registration({ ...req.body });
             const insertUser = await newUser.save();
-
-            const capitizedUsername = insertUser.username.split(' ');
-
-            for (let i = 0; i < capitizedUsername.length; i++) {
-                capitizedUsername[i] = capitizedUsername[i].chartAt(0).toUpperCase() + capitizedUsername.slice(1);
-            }
 
             return res.send({
                 token: insertUser._id,

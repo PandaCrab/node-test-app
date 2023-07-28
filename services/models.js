@@ -20,7 +20,7 @@ const productSchema = new mongoose.Schema({
     },
     comments: [{
         userId: String | null,
-        userAvatar: String | null,
+        photo: String | null | null,
         username: String | null,
         createdDate: Date,
         message: String,
@@ -36,6 +36,7 @@ const authSchema = new mongoose.Schema({
     _id: String,
     username: { type: String, required: true },
     password: { type: String, required: true },
+    photo: String | null,
     email: String,
     age: String,
     phone: Number,
@@ -66,6 +67,7 @@ const Registration = mongoose.model('registration', registrationSchema);
 const UserSchema = mongoose.Schema({
     email: String,
     username: String,
+    photo: String | null,
     phone: Number,
     password: String,
     admin: Boolean,
@@ -90,6 +92,7 @@ const OrderSchema = mongoose.Schema({
         country: { type: String, required: true },
         zip: { type: String, required: true },
     },
+    shippingStatus: String,
     orderInfo: {
         products: [Object],
     },
@@ -101,6 +104,24 @@ const OrderSchema = mongoose.Schema({
 
 const Order = mongoose.model('orders', OrderSchema);
 
+const OrderHistorySchema = mongoose.Schema({
+    date: Date,
+    userId: String,
+    username: String,
+    orderInfo: {
+        products: [Object],
+    },
+    status: String | Boolean,
+    payment: {
+        payed: Boolean,
+        paymentType: String,
+    },
+}, {
+    collection: 'orders',
+});
+
+const OrderHistory = mongoose.model('orderHistory', OrderHistorySchema);
+
 module.exports = {
-    Product, User, Registration, UserInfo, Order,
+    Product, User, Registration, UserInfo, Order, OrderHistory,
 };

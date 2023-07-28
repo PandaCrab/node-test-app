@@ -1,14 +1,69 @@
 const express = require('express');
 
 const router = express.Router();
-const { Order } = require('../services/models');
+const { Order, Product, OrderHistory } = require('../services/models');
+
+router.get('/', async (req, res) => {
+    try {
+        const orderHisory = await OrderHistory.find().lean();
+
+        return res.status(200).send(orderHisory);
+    } catch (err) {
+        console.log(err);
+    }
+});
+
+router.get('/:id', async (req, res) => {
+    const _id = req.params.id;
+
+    try {
+        const order = await Order.findOne({ _id });
+
+        return res.status(200).send(order);
+    } catch (err) {
+        console.log(err);
+    }
+});
 
 router.post('/create', async (req, res) => {
     try {
-        const newOrder = new Order({ ...req.body });
-        const insertedOrder = await newOrder.save();
+        const productIds = req.body.orderInfo.products.map((product) => product._id);
+        const products = await Product.find({ _id: { $in: productIds } }).lean();
 
-        return res.status(201).json({ orderId: insertedOrder.orderId });
+        const quantityAvailable = products.map((product) => {
+            const productInOrder = productIds.filter((el) => el === product._id.toString());
+
+            if (productInOrder.length) {
+                if (product.quantity >= productInOrder.length) {
+                    return {
+                        id: product._id,
+                        orderedQuantity: productInOrder.length,
+                    };
+                }
+            }
+
+            return null;
+        });
+
+        if (!quantityAvailable.includes(null)) {
+            const newOrder = new Order({ ...req.body });
+            const insertedOrder = await newOrder.save();
+
+            if (insertedOrder) {
+                quantityAvailable.forEach(async (ordered) => {
+                    await Product.findOneAndUpdate({ _id: ordered.id }, {
+                        quantity: products.filter(
+                            (e) => e._id === ordered.id,
+                        )[0].quantity - ordered.orderedQuantity,
+                    });
+                });
+
+                return res.status(201).json({ orderId: insertedOrder.orderId });
+            }
+        }
+
+        return res.status(403)
+            .json({ message: 'Sorry, a quantity of the product is not much in store for Your order' });
     } catch (err) {
         console.log(err);
     }
